@@ -6,40 +6,19 @@
 # This script can utilize the GitHub API to retrieve commit history and extract relevant information.
 
 
-# json structure to fill the dataset with
-json_data = {
-    "subject": "",
-    "dataModel": "",
-    "version": "",
-    "schemaLink": "",
-    "createdAt": "",
-    "updatedAt": "",
-    "commitHash": "",
-    "commitMsg": ""
-}
-
-"""# List of waterverse data models to check
-# format [subject, datamodel]
-data_models_list = [
-    ["Weather", "WeatherAlert"],
-    ["WaterDistribution", "WaterDistributionNetwork"],
-    ["Environment", "WaterObserved"],
-    ["Agrifood", "AgriSoil"],
-    ["Environment", "PhreaticObserved"],
-    ["Environment", "FloodMonitoring"],
-    ["WaterDistributionManagementEPANET", "Pipe"],
-    ["WaterDistributionManagementEPANET", "Pump"],
-    ["WaterDistributionManagementEPANET", "Valve"],
-    ["WaterDistributionManagementEPANET", "Junction"],
-    ["WaterQuality", "WaterQualityObserved"],
-    ["WaterConsumption", "WaterConsumptionObserved"],
-    ["Weather", "WeatherObserved"],
-    ["WaterQuality", "WaterQualityPredicted"],
-    ["Environment", "EnvironmentObserved"]
-]"""
+# SDMs versions data structure to fill the dataset with:
+#json_data_db = {
+#    "subject": "",
+#    "dataModel": "",
+#    "version": "",
+#    "schemaLink": "",
+#    "commitDate"
+#    "commitHash": "",
+#}
 
 
 import os
+import re
 import json
 import requests
 from dotenv import load_dotenv
@@ -120,7 +99,10 @@ def parse_commits(data_model_list):
                         None
                     )
                     if version_line:
-                        current_version = version_line.split(":")[-1].strip().strip('"')
+                        # Use a regular expression to extract the version number
+                        match = re.search(r'"\$schemaVersion"\s*:\s*"([^"]+)"', version_line)
+                        if match:
+                            current_version = match.group(1)
 
                         # Check if the data model has not changed and the version has changed
                         if last_subject == subject and last_version != current_version:
