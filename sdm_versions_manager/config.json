@@ -1,0 +1,19 @@
+{
+    "data_models": [
+        ["Weather", "WeatherAlert"],
+        ["WaterDistribution", "WaterDistributionNetwork"],
+        ["Environment", "WaterObserved"],
+        ["Agrifood", "AgriSoil"],
+        ["Environment", "PhreaticObserved"],
+        ["Environment", "FloodMonitoring"],
+        ["WaterDistributionManagementEPANET", "Pipe"],
+        ["WaterDistributionManagementEPANET", "Pump"],
+        ["WaterDistributionManagementEPANET", "Valve"],
+        ["WaterDistributionManagementEPANET", "Junction"],
+        ["WaterQuality", "WaterQualityObserved"],
+        ["WaterConsumption", "WaterConsumptionObserved"],
+        ["Weather", "WeatherObserved"],
+        ["WaterQuality", "WaterQualityPredicted"],
+        ["Environment", "EnvironmentObserved"]
+    ]
+}

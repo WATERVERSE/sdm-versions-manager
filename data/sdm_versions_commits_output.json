@@ -1,0 +1,274 @@
+[
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.3.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "62497eac2cf6b0c4d48ea90c578299ff535b31dd",
+        "commitDate": "2023-06-06T13:52:07Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.3.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "58ca171d29c38d618a5b385d4b732bf546f7385a",
+        "commitDate": "2022-08-18T07:31:10Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.2.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "cafdc4b18b6076e6d08cfa03bc733ca1cdb4fe6c",
+        "commitDate": "2022-07-19T20:01:07Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.1.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "9e7c817a331da59ae1c4e5441adc72bbbebd0ac9",
+        "commitDate": "2022-07-19T06:55:31Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.1.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "6980eef512878146f11931b3f6110823d7245337",
+        "commitDate": "2021-09-15T22:32:54Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.1.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "2306aef1cab00e77eee294442c23bfc2118db6df",
+        "commitDate": "2021-05-15T16:05:02Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "f302ea3d1f2f6fa93b5d32bfd6c3a99358fca38a",
+        "commitDate": "2021-05-10T15:14:21Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherAlert",
+        "version": "0.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherAlert/schema.json",
+        "commitHash": "6fb6bada64f9413c16a5dbdb83e5099aa521c0af",
+        "commitDate": "2020-11-10T17:51:27Z"
+    },
+    {
+        "subject": "WaterDistribution",
+        "dataModel": "WaterDistributionNetwork",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterDistribution/blob/master/WaterDistributionNetwork/schema.json",
+        "commitHash": "e5fa97f80d9ab6bb489e9cb473399f922e88d069",
+        "commitDate": "2023-08-31T08:48:08Z"
+    },
+    {
+        "subject": "Environment",
+        "dataModel": "WaterObserved",
+        "version": "0.0.3",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Environment/blob/master/WaterObserved/schema.json",
+        "commitHash": "15b6a680d6f887956f26580a3bda6ee719f6253a",
+        "commitDate": "2023-08-30T15:05:18Z"
+    },
+    {
+        "subject": "Environment",
+        "dataModel": "WaterObserved",
+        "version": "0.0.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Environment/blob/master/WaterObserved/schema.json",
+        "commitHash": "09d0ec1555935dd00401f9d69c20a190340b74f8",
+        "commitDate": "2022-08-25T10:50:23Z"
+    },
+    {
+        "subject": "Environment",
+        "dataModel": "WaterObserved",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Environment/blob/master/WaterObserved/schema.json",
+        "commitHash": "90f43246cee25840c0cad6926f8900504617422f",
+        "commitDate": "2021-05-10T17:01:22Z"
+    },
+    {
+        "subject": "Agrifood",
+        "dataModel": "AgriSoil",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Agrifood/blob/master/AgriSoil/schema.json",
+        "commitHash": "eb12dd340fb821d532ecf9864067bffd61e092f9",
+        "commitDate": "2021-09-15T22:29:27Z"
+    },
+    {
+        "subject": "Agrifood",
+        "dataModel": "AgriSoil",
+        "version": "0.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Agrifood/blob/master/AgriSoil/schema.json",
+        "commitHash": "d81439fac398ca03b7b334cf5e27d21f5f57ec12",
+        "commitDate": "2020-12-07T20:21:17Z"
+    },
+    {
+        "subject": "Environment",
+        "dataModel": "PhreaticObserved",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Environment/blob/master/PhreaticObserved/schema.json",
+        "commitHash": "3d170bcf965204a1b0678ef3280a03e527cfe92a",
+        "commitDate": "2021-09-15T22:41:25Z"
+    },
+    {
+        "subject": "Environment",
+        "dataModel": "FloodMonitoring",
+        "version": "0.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Environment/blob/master/FloodMonitoring/schema.json",
+        "commitHash": "936e004b375f6c528d2ca628fba29d4ada2362a5",
+        "commitDate": "2021-03-10T11:48:26Z"
+    },
+    {
+        "subject": "WaterDistributionManagementEPANET",
+        "dataModel": "Valve",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterDistributionManagementEPANET/blob/master/Valve/schema.json",
+        "commitHash": "5711a6e4b13560fa1ee11b7060a8779a6a80b192",
+        "commitDate": "2021-08-30T10:22:59Z"
+    },
+    {
+        "subject": "WaterQuality",
+        "dataModel": "WaterQualityObserved",
+        "version": "0.0.4",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterQuality/blob/master/WaterQualityObserved/schema.json",
+        "commitHash": "e1fc742c9c7161733da57ee280fbe12e154116e2",
+        "commitDate": "2022-05-29T22:57:39Z"
+    },
+    {
+        "subject": "WaterQuality",
+        "dataModel": "WaterQualityObserved",
+        "version": "0.0.3",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterQuality/blob/master/WaterQualityObserved/schema.json",
+        "commitHash": "ce49f80a5614ee4057130f13e0bd56cd0d7e5de5",
+        "commitDate": "2022-05-20T06:00:18Z"
+    },
+    {
+        "subject": "WaterQuality",
+        "dataModel": "WaterQualityObserved",
+        "version": "0.0.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterQuality/blob/master/WaterQualityObserved/schema.json",
+        "commitHash": "889d436796a1c71b24974be2c6b049271b770278",
+        "commitDate": "2021-05-12T09:25:13Z"
+    },
+    {
+        "subject": "WaterQuality",
+        "dataModel": "WaterQualityObserved",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterQuality/blob/master/WaterQualityObserved/schema.json",
+        "commitHash": "3dcf4607546d3b88d15e50e6eb7e311ba7e4d4a0",
+        "commitDate": "2021-05-10T15:20:06Z"
+    },
+    {
+        "subject": "WaterQuality",
+        "dataModel": "WaterQualityObserved",
+        "version": "0.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterQuality/blob/master/WaterQualityObserved/schema.json",
+        "commitHash": "9b69455d3b3b9edb4622ca89625b738202c5e8d3",
+        "commitDate": "2021-01-26T13:50:31Z"
+    },
+    {
+        "subject": "WaterConsumption",
+        "dataModel": "WaterConsumptionObserved",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.WaterConsumption/blob/master/WaterConsumptionObserved/schema.json",
+        "commitHash": "f21ee15f0166dbc3bfdad34ab8a7864bea204127",
+        "commitDate": "2023-03-08T12:54:05Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.3.3",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "54e747047661eb66d028c5d043adfa5f5fdab5d5",
+        "commitDate": "2023-12-05T11:22:31Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.3.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "50bea4731ba3591ad83f24c4aa29bf71ef1da1b5",
+        "commitDate": "2023-08-30T14:57:17Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.3.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "6fe8325fd45c7fd762b4cd08feb331ebe972e605",
+        "commitDate": "2023-03-29T05:20:57Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.2.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "55cf9fe36e70f0928ab611ff33a162483b4f419e",
+        "commitDate": "2022-01-25T15:35:10Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.2.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "ce28fe0d2515fdf7a624b300f9a51fdd9255fcdb",
+        "commitDate": "2021-11-22T18:38:08Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.2.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "b56fb349e1a5ba372c3ea992a02d509e0fd43348",
+        "commitDate": "2021-11-12T11:46:05Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.1.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "81adafbc71a09bfce7309afeebf95a5ff2701035",
+        "commitDate": "2021-10-26T16:02:20Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.0.3",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "87222a08b9e45908db20784c4f01ef9ab6956c86",
+        "commitDate": "2021-10-26T10:44:43Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.0.2",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "5930ab37cce417a27fd9fe871fc17fdc38dc5c73",
+        "commitDate": "2021-09-15T22:33:14Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.0.1",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "f6bdea3439e0caa70a6b3e616e4c9672eb769445",
+        "commitDate": "2021-05-10T15:14:35Z"
+    },
+    {
+        "subject": "Weather",
+        "dataModel": "WeatherObserved",
+        "version": "0.0",
+        "schemaLink": "https://github.com/smart-data-models/dataModel.Weather/blob/master/WeatherObserved/schema.json",
+        "commitHash": "c8ac20333961da52fae68f53718594adc62c4a35",
+        "commitDate": "2021-03-08T01:17:02Z"
+    }
+]
