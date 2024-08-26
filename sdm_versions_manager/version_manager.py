@@ -10,16 +10,27 @@ import requests
 import re
 from database import insert_data_to_mongo, get_existing_versions
 from dotenv import load_dotenv
+import logging
+from datetime import datetime
 
 
 # Load environment variables
 load_dotenv()
+
+
+# Logging set up 
+os.makedirs('logs', exist_ok=True)
+
+logging.basicConfig(filename='logs/version_updates.log', level=logging.INFO,
+                    format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
 
 GITHUB_API_URL = "https://api.github.com/repos/smart-data-models"
 HEADERS = {
     "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
     "Accept": "application/vnd.github.v3+json"
 }
+
 
 def fetch_latest_versions(data_model_list):
     """Fetch the latest versions of data models from GitHub."""
@@ -72,6 +83,10 @@ def fetch_latest_versions(data_model_list):
 def update_database_with_new_versions(data_model_list):
     """Check for new versions and update the MongoDB database."""
     latest_versions = fetch_latest_versions(data_model_list)
+    update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    updates_made = False
+
+    logging.info(f"Version check started at {update_date}")
 
     for version_info in latest_versions:
         # Check if the version already exists in the database
@@ -83,11 +98,24 @@ def update_database_with_new_versions(data_model_list):
             # version_info: current version on GitHub
             if existing_version['version'] != version_info['version']:
                 insert_data_to_mongo([version_info])  # Insert as a list
-                print(f"Inserted new version: {version_info['version']} for {version_info['dataModel']}")
+                log_message = f"Updated {version_info['dataModel']} from version {existing_version['version']} to {version_info['version']}"
+                print(log_message)
+                logging.info(log_message)
+                updates_made = True
         else:
             # If no existing version, insert the new version
             insert_data_to_mongo([version_info])
-            print(f"Inserted new version: {version_info['version']} for {version_info['dataModel']}")
+            log_message = f"Inserted new version: {version_info['version']} for {version_info['dataModel']}"
+            print(log_message)
+            logging.info(log_message)
+            updates_made = True
+
+        if not updates_made:
+            logging.info("No updates were necessary. All versions are current.")
+
+        logging.info(f"Version check completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logging.info("-" * 50)  # Separator line for readability
+
 
 if __name__ == "__main__":
     import json

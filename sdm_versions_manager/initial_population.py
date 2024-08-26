@@ -22,15 +22,20 @@ import json
 import requests
 import logging
 from dotenv import load_dotenv
-
+from datetime import datetime
 from database import insert_data_to_mongo
 
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+
+# Logging setup
+os.makedirs('logs', exist_ok=True)
+
+logging.basicConfig(filename='logs/initial_population.log', level=logging.INFO,
+                    format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
 
 # Constants for GitHub API
 GITHUB_BASE_URL = "https://github.com/smart-data-models"
@@ -160,17 +165,27 @@ def parse_commits(data_model_list):
 
 
 def main():
+    """Main function to execute the script."""
+    start_time = datetime.now()
+    logging.info(f"Starting initial population at {start_time}")
 
     config = load_config("sdm_versions_manager/config.json")
     data_models_list = config.get('data_models', [])
+
+    logging.info(f"Loaded {len(data_models_list)} data models from configuration")
 
     result_json = parse_commits(data_models_list)
 
     # Insert data into MongoDB
     insert_data_to_mongo(json.loads(result_json))  # Call the function to insert data
+    logging.info(f"Inserted versions data into MongoDB")
 
-    # Print the final result
-    logging.info("Commit data has been written to %s and inserted into MongoDB.")
+    end_time = datetime.now()
+    duration = end_time - start_time
+    logging.info(f"Initial population completed at {end_time}")
+    logging.info(f"Total duration: {duration}")
+    logging.info("-" * 50)  # Add a separator line for readability
+
 
 if __name__ == "__main__":
     main()
