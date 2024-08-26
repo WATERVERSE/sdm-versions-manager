@@ -166,22 +166,11 @@ def main():
 
     result_json = parse_commits(data_models_list)
 
-    # The output file path to store the parsed data which will be used to populate the database
-    output_dir = './data'
-    output_file = os.path.join(output_dir, 'sdm_versions_commits_output.json')
-
-    # Create the data directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-
-    # Write the result to a JSON file
-    with open(output_file, 'w') as json_file:
-        json.dump(json.loads(result_json), json_file, indent=4)
-
     # Insert data into MongoDB
     insert_data_to_mongo(json.loads(result_json))  # Call the function to insert data
 
     # Print the final result
-    logging.info("Commit data has been written to %s and inserted into MongoDB.", output_file)
+    logging.info("Commit data has been written to %s and inserted into MongoDB.")
 
 if __name__ == "__main__":
     main()
