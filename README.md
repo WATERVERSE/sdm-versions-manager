@@ -108,10 +108,26 @@ The data inserted into the MongoDB database will follow this structure:
 ```
 **Mongo Compass**: 
 
-An overview of the populated dataset with SDMs versions data is shown below: 
+An overview of the populated dataset with SDMs historical versions data is shown below, after running the `initial_population.py` module: 
 
 ![mongo-compass](docs/mongo_compass_data.png)
 
+## SDMs Version Manager 
 
+The `version_manager.py` module is responsible for monitoring and updating the database with new versions of Smart Data Models. This module ensures that the database always contains the most up-to-date information about each data model.
 
+To run the version manager and check for updates, execute the following command:
 
+```bash
+python version_manager.py
+```
+
+### Features
+
+- Checks for updates in data model versions on GitHub.
+- Compares the latest GitHub version with the version stored in the database.
+- Updates the database only when a new version is detected.
+- Provides clear logging of version changes and database updates.
+
+**Note**:
+The version_manager.py script is designed to work in conjunction with the initial database population performed by initial_population.py. Ensure that you have run the initial population script before using the version manager.
