@@ -34,9 +34,10 @@ def document_exists(data):
 
     return existing_document is not None
 
+
 def insert_data_to_mongo(data):
     """Insert parsed data into MongoDB if it doesn't already exist."""
-    
+
     client = MongoClient(MONGO_URI)
     db = client[DB_NAME]
     collection = db[COLLECTION_NAME]
@@ -52,3 +53,28 @@ def insert_data_to_mongo(data):
     
     client.close()
     print(f"Inserted {inserted_count} unique documents into MongoDB.")
+
+
+def get_existing_versions(subject, data_model):
+    """Retrieve the existing version of a data model from the database.
+
+    Args:
+        subject (str): The subject of the data model.
+        data_model (str): The name of the data model.
+
+    Returns:
+        dict: The existing version document, or None if not found.
+    """
+    client = MongoClient(MONGO_URI)
+    db = client[DB_NAME]
+    collection = db[COLLECTION_NAME]
+
+    filter = {
+        "subject": subject,
+        "dataModel": data_model
+    }
+
+    existing_document = collection.find_one(filter)
+    client.close()
+
+    return existing_document
