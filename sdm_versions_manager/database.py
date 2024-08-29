@@ -1,13 +1,14 @@
 # Contains functions to connect to MongoDB, create the database, and perform CRUD operations.
 
 from pymongo import MongoClient
-import os
+from pymongo.errors import ConnectionFailure, OperationFailure
+from os import getenv
 
 
 # Load MongoDB connection details from environment variables or configuration
-MONGO_URI = os.getenv('MONGO_URI')
-DB_NAME = os.getenv('DB_NAME')
-COLLECTION_NAME = os.getenv('COLLECTION_NAME')
+MONGO_URI = getenv('MONGO_URI')
+DB_NAME = getenv('DB_NAME')
+COLLECTION_NAME = getenv('COLLECTION_NAME')
 
 
 def document_exists(data):
@@ -18,41 +19,76 @@ def document_exists(data):
 
     Returns:
         bool: True if the document exists, False otherwise.
+
+    Raises:
+        ConnectionError: If there's an issue connecting to the database.
     """
-    client = MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    collection = db[COLLECTION_NAME]
+    client = None
+    try:
+        client = MongoClient(MONGO_URI)
+        db = client[DB_NAME]
+        collection = db[COLLECTION_NAME]
 
-    filter = {
-        "subject": data["subject"],
-        "dataModel": data["dataModel"],
-        "version": data["version"]
-    }
+        filter = {
+            "subject": data["subject"],
+            "dataModel": data["dataModel"],
+            "version": data["version"]
+        }
 
-    existing_document = collection.find_one(filter)
-    client.close()
+        existing_document = collection.find_one(filter)
+        return existing_document is not None
 
-    return existing_document is not None
+    except ConnectionFailure as e:
+        # Handle connection errors
+        raise ConnectionError(f"Failed to connect to the database: {str(e)}")
+
+    finally:
+        # Ensure the client is closed even if an exception occurs
+        if client:
+            client.close()
 
 
 def insert_data_to_mongo(data):
-    """Insert parsed data into MongoDB if it doesn't already exist."""
-
-    client = MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    collection = db[COLLECTION_NAME]
-
-    inserted_count = 0
-    for document in data:
-        if not document_exists(document):
-            try:
-                collection.insert_one(document)
-                inserted_count += 1
-            except Exception as e:
-                print(f"An error occurred while inserting data into MongoDB: {e}")
+    """Insert parsed data into MongoDB if it doesn't already exist.
     
-    client.close()
-    print(f"Inserted {inserted_count} unique documents into MongoDB.")
+    Args:
+        data (list): A list of dictionaries, where each dictionary represents a document
+                     to be inserted into the MongoDB collection.
+
+    Returns:
+        int: The number of documents successfully inserted into the collection.
+
+    Raises:
+        ConnectionError: If there's an issue connecting to the database.
+    """
+
+    client = None
+    inserted_count = 0
+
+    try:
+        client = MongoClient(MONGO_URI)
+        db = client[DB_NAME]
+        collection = db[COLLECTION_NAME]
+
+        for document in data:
+            if not document_exists(document):
+                try:
+                    collection.insert_one(document)
+                    inserted_count += 1
+                except OperationFailure as e:
+                    print(f"An error occurred while inserting a document: {e}")
+
+        return inserted_count
+
+    except ConnectionFailure as e:
+        raise ConnectionError(f"Failed to connect to the database: {str(e)}")
+
+    finally:
+        if client:
+            client.close()
+        print(f"Inserted {inserted_count} unique documents into MongoDB.")
+
+
 
 
 def get_existing_versions(subject, data_model):
@@ -64,17 +100,27 @@ def get_existing_versions(subject, data_model):
 
     Returns:
         dict: The existing version document, or None if not found.
+
+    Raises:
+        ConnectionError: If there's an issue connecting to the database.
     """
-    client = MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    collection = db[COLLECTION_NAME]
+    client = None
+    try:
+        client = MongoClient(MONGO_URI)
+        db = client[DB_NAME]
+        collection = db[COLLECTION_NAME]
 
-    filter = {
-        "subject": subject,
-        "dataModel": data_model
-    }
+        filter = {
+            "subject": subject,
+            "dataModel": data_model
+        }
 
-    existing_document = collection.find_one(filter)
-    client.close()
+        existing_document = collection.find_one(filter)
+        return existing_document
 
-    return existing_document
+    except ConnectionFailure as e:
+        raise ConnectionError(f"Failed to connect to the database: {str(e)}")
+
+    finally:
+        if client:
+            client.close()
