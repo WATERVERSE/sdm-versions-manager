@@ -43,6 +43,7 @@ import re
 import json
 import requests
 import logging
+import time
 from dotenv import load_dotenv
 from datetime import datetime
 from database import insert_data_to_mongo
@@ -68,14 +69,35 @@ HEADERS = {
 }
 
 def load_config(config_file) -> dict:
-    """Load configuration from a JSON file containing the data models and subjects."""
+    """
+    Load configuration from a JSON file containing the data models and subjects.
+    
+    Args:
+        config_file (str): The path to the JSON configuration file.
+
+    Returns:
+        dict: A dictionary containing the configuration data loaded from the JSON file.
+    """
     
     with open(config_file, 'r') as file:
         return json.load(file)
 
 
 def construct_schema_link(subject, data_model):
-    """Construct the GitHub link to the schema.json file."""
+    """
+    Construct the GitHub link to the schema.json file.
+
+    This function generates a URL pointing to the schema.json file
+    for a specific data model within the Smart Data Models repository.
+
+    Args:
+        subject (str): The subject or domain of the data model (e.g., "Energy", "Environment").
+        data_model (str): The name of the specific data model.
+
+    Returns:
+        str: A complete URL to the schema.json file on GitHub.
+    
+    """
 
     base_url = "https://github.com/smart-data-models"
     repo_name = f"dataModel.{subject}"
@@ -83,7 +105,26 @@ def construct_schema_link(subject, data_model):
 
 
 def get_commits_from_github(subject, data_model):
-    """Fetch commit history from GitHub for a data model."""
+    """
+    Fetch commit history from GitHub for a data model.
+
+    This function retrieves the commit history for a given data model's schema.json file
+    from the Smart Data Models GitHub repository. It handles pagination to fetch all commits.
+
+    Args:
+        subject (str): The subject or domain of the data model (e.g., "Energy", "Environment").
+        data_model (str): The name of the specific data model.
+
+    Returns:
+        Tuple[List[dict], str]: A tuple containing two elements:
+            - List[dict]: A list of dictionaries, each representing a commit. 
+              Each dictionary contains commit details such as SHA, author, date, and message.
+            - str: The name of the GitHub repository.
+    
+    Raises:
+        requests.exceptions.RequestException: If there's an error in making the HTTP request.
+    
+    """
 
     repo_name = f"dataModel.{subject}"
     url = f"{GITHUB_API_URL}/{repo_name}/commits?path={data_model}/schema.json"
@@ -95,23 +136,55 @@ def get_commits_from_github(subject, data_model):
         try:
             response = requests.get(f"{url}&page={page}", headers=HEADERS)
             response.raise_for_status()
+
+            # Check rate limit
+            remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
+            if remaining <= 1:
+                reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
+                sleep_time = max(reset_time - time.time(), 0) + 1
+                logging.warning(f"Rate limit reached. Sleeping for {sleep_time:.2f} seconds.")
+                time.sleep(sleep_time)
+
+            commits = response.json()
+            if not commits:
+                break
+
+            all_commits.extend(commits)
+            page += 1
+
         except requests.exceptions.RequestException as e:
-            logging.error(f"Error fetching commits: {e}")
-            return [], repo_name
-
-        commits = response.json()
-        if not commits:
-            break
-
-        all_commits.extend(commits)
-        page += 1
+            if response.status_code == 403 and 'rate limit' in response.text.lower():
+                reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
+                sleep_time = max(reset_time - time.time(), 0) + 1
+                logging.warning(f"Rate limit exceeded. Sleeping for {sleep_time:.2f} seconds.")
+                time.sleep(sleep_time)
+                continue  # Retry the request
+            else:
+                logging.error(f"Error fetching commits: {e}")
+                return [], repo_name
 
     return all_commits, repo_name
 
 
 def parse_commits(data_model_list):
-    """Parse commits for each data model to extract relevant information 
-    when the schemaVersion changes in the commit changed files."""
+    """
+    Parse commits for each data model to extract relevant information 
+    when the schemaVersion changes in the commit changed files.
+    
+    Args:
+        data_model_list (List[List[str, str]]): A list of list, where each list contains
+            two strings: the subject and the data model name.
+
+    Returns:
+        str: A JSON-formatted string containing an array of objects. Each object represents
+             a schema version change and includes the following fields:
+             - subject: The subject of the data model.
+             - dataModel: The name of the data model.
+             - version: The schema version.
+             - schemaLink: A link to the schema file on GitHub.
+             - commitHash: The hash of the commit where the version changed.
+             - commitDate: The date of the commit.
+    """
     
     json_payload = []
 
