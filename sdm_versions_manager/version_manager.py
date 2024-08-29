@@ -30,6 +30,7 @@
 import os
 import requests
 import re
+import json
 from database import insert_data_to_mongo, get_existing_versions
 from dotenv import load_dotenv
 import logging
@@ -55,7 +56,27 @@ HEADERS = {
 
 
 def fetch_latest_versions(data_model_list):
-    """Fetch the latest versions of data models from GitHub."""
+    """
+    Fetch the latest versions of data models from GitHub.
+
+    This function retrieves the most recent commit for each data model's schema.json file,
+    extracts the schema version, and compiles relevant information about the latest version.
+    
+    Args:
+        data_model_list (List[List[str, str]]): A list of list, where each list contains
+            two strings: the subject and the data model name.
+
+    Returns:
+        List[Dict[str, str]]: A list of dictionaries, each containing information about
+        the latest version of a data model. Each dictionary has the following keys:
+            - subject: The subject of the data model.
+            - dataModel: The name of the data model.
+            - version: The latest schema version.
+            - schemaLink: A link to the schema file on GitHub.
+            - commitHash: The hash of the most recent commit.
+            - commitDate: The date of the most recent commit.
+
+    """
     latest_versions = []
 
     for subject, data_model in data_model_list:
@@ -103,7 +124,21 @@ def fetch_latest_versions(data_model_list):
     return latest_versions
 
 def update_database_with_new_versions(data_model_list):
-    """Check for new versions and update the MongoDB database."""
+    """
+    Check for new versions and update the MongoDB database.
+
+    This function fetches the latest versions of specified data models from GitHub,
+    compares them with the versions stored in the MongoDB database, and updates
+    the database with new versions if necessary.
+
+    Args:
+        data_model_list (List[Tuple[str, str]]): A list of tuples, where each tuple contains
+            two strings: the subject (domain) and the data model name.
+
+    Returns:
+        None
+    
+    """
     latest_versions = fetch_latest_versions(data_model_list)
     update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     updates_made = False
@@ -140,7 +175,6 @@ def update_database_with_new_versions(data_model_list):
 
 
 if __name__ == "__main__":
-    import json
 
     # Load the data models from the config file
     with open('sdm_versions_manager/config.json', 'r') as config_file:
