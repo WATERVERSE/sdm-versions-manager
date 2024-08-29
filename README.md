@@ -61,7 +61,11 @@
 
 4. **Configure the data models**:
 
-    Create a `config.json` file in the root directory with the following structure (subject, data model name) that containes all the data models used in the WATERVERSE project pilots:
+    Since this service is intended to be used in the scope of the WATERVERSE project, we have selected these specific data models (as shown below in the example) which were used in the pilot projects. 
+
+    But in general cases, you can specify any data model you need to manage its version by modifiying the content of the `config.json` file.  
+
+    Create a `config.json` file in the root directory with the following structure (subject, data model name) that containes all the data models you want to manage:
 
     ```json
     {
