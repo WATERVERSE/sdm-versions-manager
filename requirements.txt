@@ -1,0 +1,4 @@
+# Python3.11.7 project
+requests==2.32.3
+pymongo==4.8.0
+python-dotenv==1.0.1
