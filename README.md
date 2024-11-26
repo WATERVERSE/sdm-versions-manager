@@ -68,25 +68,28 @@
     Create a `config.json` file in the root directory with the following structure (subject, data model name) that containes all the data models you want to manage:
 
     ```json
-    {
-        "data_models": [
-            ["Weather", "WeatherAlert"],
-            ["WaterDistribution", "WaterDistributionNetwork"],
-            ["Environment", "WaterObserved"],
-            ["Agrifood", "AgriSoil"],
-            ["Environment", "PhreaticObserved"],
-            ["Environment", "FloodMonitoring"],
-            ["WaterDistributionManagementEPANET", "Pipe"],
-            ["WaterDistributionManagementEPANET", "Pump"],
-            ["WaterDistributionManagementEPANET", "Valve"],
-            ["WaterDistributionManagementEPANET", "Junction"],
-            ["WaterQuality", "WaterQualityObserved"],
-            ["WaterConsumption", "WaterConsumptionObserved"],
-            ["Weather", "WeatherObserved"],
-            ["WaterQuality", "WaterQualityPredicted"],
-            ["Environment", "EnvironmentObserved"]
-        ]
-    }
+        {
+            "data_models": [
+                ["Weather", "WeatherAlert"],
+                ["Weather", "WeatherObserved"],
+                ["Weather", "WeatherForecast"],
+                ["Agrifood", "AgriSoil"],
+                ["Environment", "PhreaticObserved"],
+                ["Environment", "FloodMonitoring"],
+                ["Environment", "EnvironmentObserved"],
+                ["Environment", "WaterObserved"],
+                ["WaterDistribution", "WaterDistributionNetwork"],
+                ["WaterDistributionManagementEPANET", "Pipe"],
+                ["WaterDistributionManagementEPANET", "Pump"],
+                ["WaterDistributionManagementEPANET", "Valve"],
+                ["WaterDistributionManagementEPANET", "Junction"],
+                ["WaterQuality", "WaterQualityObserved"],
+                ["WaterQuality", "WaterQualityPredicted"],
+                ["WaterConsumption", "WaterConsumptionObserved"],
+                ["SatelliteImagery", "EOSatelliteImagery "],
+                ["CallComplaints", "Complaint"]    
+            ]
+        }
     ```
 
 # Usage
@@ -114,7 +117,7 @@ The data inserted into the MongoDB database will follow this structure:
     "subject": "string",
     "dataModel": "string",
     "version": "string",
-    "schemaLink": "string",
+    "schemaUrl": "string",
     "commitDate": "string",
     "commitHash": "string"
 }
@@ -124,7 +127,7 @@ Description of keys:
 - **subject**: Represents the main topic or subject of the data model (e.g., "Weather", "WaterQuality"). Currently, every subject is a git repository. The subjects can belong to one or several domains. The domains represent industrial sectors.
 - **dataModel**: The name of the specific data model being stored in GitHub under the subject repository.
 - **version**: The schema version the data model on GitHub (found in the schema.json file) allowing for tracking of changes over time.
-- **schemaLink**: A URL or file path pointing to the full schema definition of the data model.
+- **schemaUrl**: A URL or file path pointing to the full schema definition of the data model.
 - **commitDate**: The date and time when this version of the data model was committed or last updated.
 - **commitHash**: A unique identifier (typically from version control systems like Git) associated with the commit that introduced or modified this version of the data model.
 

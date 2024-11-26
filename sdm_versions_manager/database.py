@@ -111,8 +111,6 @@ def insert_data_to_mongo(data):
         print(f"Inserted {inserted_count} unique documents into MongoDB.")
 
 
-
-
 def get_existing_versions(subject, data_model):
     """Retrieve the existing version of a data model from the database.
 
