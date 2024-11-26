@@ -87,8 +87,8 @@ def construct_schema_link(subject, data_model):
     """
     Construct the GitHub link to the schema.json file.
 
-    This function generates a URL pointing to the schema.json file
-    for a specific data model within the Smart Data Models repository.
+    This function generates a URL pointing to the schema.json file in the master branch
+    for a specific data model within the Smart Data Models repository on GitHub.
 
     Args:
         subject (str): The subject or domain of the data model (e.g., "Energy", "Environment").
