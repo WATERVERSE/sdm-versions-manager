@@ -72,7 +72,7 @@ def fetch_latest_versions(data_model_list):
             - subject: The subject of the data model.
             - dataModel: The name of the data model.
             - version: The latest schema version.
-            - schemaLink: A link to the schema file on GitHub.
+            - schemaUrl: A URL to the raw schema file on GitHub corresponding to the commit.
             - commitHash: The hash of the most recent commit.
             - commitDate: The date of the most recent commit.
 
@@ -113,7 +113,7 @@ def fetch_latest_versions(data_model_list):
                             "subject": subject,
                             "dataModel": data_model,
                             "version": current_version,
-                            "schemaLink": f"https://github.com/smart-data-models/dataModel.{subject}/blob/master/{data_model}/schema.json",
+                            "SchemaUrl": f"https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json",
                             "commitHash": commit_hash,
                             "commitDate": commit_date
                         })
@@ -184,3 +184,5 @@ if __name__ == "__main__":
     # Update the database with new versions
     update_database_with_new_versions(data_models_list)
     
+
+    #https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json

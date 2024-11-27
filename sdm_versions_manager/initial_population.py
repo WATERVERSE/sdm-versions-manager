@@ -33,7 +33,7 @@
 #    "subject": "",
 #    "dataModel": "",
 #    "version": "",
-#    "schemaLink": "",
+#    "schemaUrl": "",
 #    "commitDate"
 #    "commitHash": "",
 #}
@@ -83,12 +83,12 @@ def load_config(config_file) -> dict:
         return json.load(file)
 
 
-def construct_schema_link(subject, data_model):
+def construct_mater_schema_link(subject, data_model):
     """
-    Construct the GitHub link to the schema.json file.
+    Construct the GitHub link to the schema.json file in the Master brnach.
 
-    This function generates a URL pointing to the schema.json file
-    for a specific data model within the Smart Data Models repository.
+    This function generates a URL pointing to the schema.json file in the master branch
+    for a specific data model within the Smart Data Models repository on GitHub.
 
     Args:
         subject (str): The subject or domain of the data model (e.g., "Energy", "Environment").
@@ -247,7 +247,7 @@ def parse_commits(data_model_list):
                                 "subject": subject,
                                 "dataModel": data_model,
                                 "version": current_version,
-                                "schemaLink": construct_schema_link(subject, data_model),
+                                "schemaUrl": schema_url,
                                 "commitHash": commit_hash,
                                 "commitDate": commit_date
                             })
