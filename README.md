@@ -162,3 +162,48 @@ python version_manager.py
 
 **Note**:
 The version_manager.py script is designed to work in conjunction with the initial database population performed by initial_population.py. Ensure that you have run the initial population script before using the version manager.
+
+## APIs documentation 
+
+A server has been implemented based on FastAPI to allow users to interact with the database with "read only access". the API allows users to retrieve versions of a specified data model and obtain the schema URL for a particular version.
+
+To start the server, run the collowing command: 
+
+```bash
+cd api
+python -m uvicorn server:app --reload
+```
+
+### API endpoints
+
+**1. List Smart Data Model Version**
+
+This endpoint retrieves all the versions associated with a specified data model.
+ 
+````
+GET /data-model/{name}/versions
+````
+ 
+**Parameters**
+
+- name (path parameter): The name of the data model for which you want to retrieve the versions.
+
+**Responses**
+- 200 OK: Returns a list of version numbers for the specified data model.
+- 404 Not Found: If no data model with the specified name exists in the database.
+
+
+**2. Get Schema URL by Version**
+
+This endpoint retrieves the schema URL for a specific version of a given data model.
+````
+GET /datamodel/{name}/version/{version}
+````
+
+**Parameters**
+- name (path parameter): The name of the data model.
+- version (path parameter): The version number of the data model.
+
+**Responses**
+- 200 OK: Returns a JSON object containing the version number and its corresponding schema URL.
+- 404 Not Found: If the specified data model version does not exist in the database.
