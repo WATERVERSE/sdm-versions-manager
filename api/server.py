@@ -53,7 +53,7 @@ async def root():
     return {"message: This is the SDM version manager api."}
 
 
-@app.get("/data-model/{name}/versions", response_description="Get all the versions of a data model", status_code=status.HTTP_200_OK)
+@app.get("/datamodel/{name}/versions", response_description="Get all the versions of a data model", status_code=status.HTTP_200_OK)
 def list_datamodel_versions(name: str):    
     collection = app.database["versions"]
 
@@ -81,7 +81,7 @@ def get_schema(name: str, version: str):
     # Prepare the response dictionary with version and schemaUrl
     response_data = {
         "version": result["version"],
-        "schemaUrl": result["SchemaUrl"],
+        "schemaUrl": result["schemaUrl"],
     }
     
     return response_data

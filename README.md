@@ -181,7 +181,7 @@ python -m uvicorn server:app --reload
 This endpoint retrieves all the versions associated with a specified data model.
  
 ````
-GET /data-model/{name}/versions
+GET /datamodel/{name}/versions
 ````
  
 **Parameters**
