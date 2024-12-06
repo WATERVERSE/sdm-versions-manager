@@ -167,7 +167,7 @@ The version_manager.py script is designed to work in conjunction with the initia
 
 A server has been implemented based on FastAPI to allow users to interact with the database with "read only access". the API allows users to retrieve versions of a specified data model and obtain the schema URL for a particular version.
 
-To start the server, run the collowing command: 
+To start the server, run the following command: 
 
 ```bash
 cd api
@@ -176,7 +176,7 @@ python -m uvicorn server:app --reload
 
 ### API endpoints
 
-**1. List Smart Data Model Version**
+**1. List Smart Data Model Versions**
 
 This endpoint retrieves all the versions associated with a specified data model.
  
@@ -186,24 +186,59 @@ GET /datamodel/{name}/versions
  
 **Parameters**
 
-- name (path parameter): The name of the data model for which you want to retrieve the versions.
+- name (path parameter): The name of the data model (Entity Type) for which you want to retrieve the versions (e.g., WaterObserved).
 
 **Responses**
+
 - 200 OK: Returns a list of version numbers for the specified data model.
 - 404 Not Found: If no data model with the specified name exists in the database.
+
+**Example request URL**
+
+```shell
+http://127.0.0.1:8000/datamodel/WaterObserved/versions' 
+```
+
+**Example response**
+
+````shell
+[
+  "0.0.4",
+  "0.0.3",
+  "0.0.2",
+  "0.0.1"
+]
+````
 
 
 **2. Get Schema URL by Version**
 
 This endpoint retrieves the schema URL for a specific version of a given data model.
 ````
-GET /datamodel/{name}/version/{version}
+GET /datamodel/{name}/versions/{version}
 ````
 
 **Parameters**
-- name (path parameter): The name of the data model.
-- version (path parameter): The version number of the data model.
+
+- name (path parameter): The name of the data model (Entity Type) for which you want to retrieve the versions (e.g., WeatherForecast).
+- version (path parameter): The version number of the data model (e.g., 0.3.4).
 
 **Responses**
+
 - 200 OK: Returns a JSON object containing the version number and its corresponding schema URL.
 - 404 Not Found: If the specified data model version does not exist in the database.
+
+**Example request URL**
+
+```
+http://127.0.0.1:8000/datamodel/WaterObserved/versions/0.0.4
+```
+
+**Example response**
+
+```shell
+{
+  "version": "0.0.4",
+  "schemaUrl": "https://raw.githubusercontent.com/smart-data-models/dataModel.Environment/6735c895688276b924b64ab27c18547222c05219/WaterObserved/schema.json"
+}
+```
