@@ -21,7 +21,7 @@
 ##
 
 
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import FastAPI, HTTPException, status
 from dotenv import dotenv_values
 from pymongo import MongoClient
 from contextlib import asynccontextmanager
@@ -48,7 +48,7 @@ async def lifespan(app):
 
 app = FastAPI(lifespan=lifespan, title="SDM versions manager")
 
-@app.get("/")
+@app.get("/info")
 async def root():
     return {"message: This is the SDM version manager api."}
 
@@ -68,7 +68,7 @@ def list_datamodel_versions(name: str):
     return versions
 
 
-@app.get("/datamodel/{name}/version/{version}", response_description="Get the schema URL of a data model at a particular version", status_code=status.HTTP_200_OK)
+@app.get("/datamodel/{name}/versions/{version}", response_description="Get the schema URL of a data model at a particular version", status_code=status.HTTP_200_OK)
 def get_schema(name: str, version: str):
     collection = app.database["versions"]
     
