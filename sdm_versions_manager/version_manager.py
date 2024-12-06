@@ -113,7 +113,7 @@ def fetch_latest_versions(data_model_list):
                             "subject": subject,
                             "dataModel": data_model,
                             "version": current_version,
-                            "SchemaUrl": f"https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json",
+                            "schemaUrl": f"https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json",
                             "commitHash": commit_hash,
                             "commitDate": commit_date
                         })

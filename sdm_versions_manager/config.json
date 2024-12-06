@@ -16,7 +16,7 @@
         ["WaterQuality", "WaterQualityObserved"],
         ["WaterQuality", "WaterQualityPredicted"],
         ["WaterConsumption", "WaterConsumptionObserved"],
-        ["SatelliteImagery", "EOSatelliteImagery "],
+        ["SatelliteImagery", "EOSatelliteImagery"],
         ["CallComplaints", "Complaint"]    
     ]
 }
