@@ -1,6 +1,6 @@
 # Python3.11.7 project
 requests==2.32.3
-pymongo==4.8.0
+pymongo==4.11
 python-dotenv==1.0.1
-fastapi==0.115.5
-uvicorn==0.32.1
+fastapi==0.115.8
+uvicorn==0.34.0

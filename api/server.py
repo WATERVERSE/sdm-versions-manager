@@ -50,7 +50,7 @@ app = FastAPI(lifespan=lifespan, title="SDM versions manager")
 
 @app.get("/info")
 async def root():
-    return {"message: This is the SDM version manager api."}
+    return {"message": "This is the SDM version manager api."}
 
 
 @app.get("/datamodel/{name}/versions", response_description="Get all the versions of a data model", status_code=status.HTTP_200_OK)

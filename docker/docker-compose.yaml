@@ -1,0 +1,11 @@
+services:
+  mongo-db:
+    image: mongo:latest
+    hostname: mongo-db
+    container_name: mongo-db
+    expose:
+      - 27017
+    ports:
+      - 127.0.0.1:27017:27017
+    volumes:
+      - ./data/db:/data/db

@@ -38,15 +38,16 @@
 #    "commitHash": "",
 #}
 
-import os
-import re
-import json
-import requests
-import logging
-import time
 from dotenv import load_dotenv
 from datetime import datetime
 from database import insert_data_to_mongo
+from requests import get
+from requests.exceptions import RequestException
+from json import load, dumps, loads
+from logging import info, warning, error, basicConfig, INFO
+from time import time, sleep
+from os import getenv, makedirs
+from re import search
 
 
 # Load environment variables from .env file
@@ -54,17 +55,17 @@ load_dotenv()
 
 
 # Logging setup
-os.makedirs('logs', exist_ok=True)
+makedirs('logs', exist_ok=True)
 
-logging.basicConfig(filename='logs/initial_population.log', level=logging.INFO,
-                    format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+basicConfig(filename='logs/initial_population.log', level=INFO,
+            format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 
 # Constants for GitHub API
 GITHUB_BASE_URL = "https://github.com/smart-data-models"
 GITHUB_API_URL = "https://api.github.com/repos/smart-data-models"
 HEADERS = {
-    "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
+    "Authorization": f"token {getenv('GITHUB_TOKEN')}",
     "Accept": "application/vnd.github.v3+json"
 }
 
@@ -80,12 +81,12 @@ def load_config(config_file) -> dict:
     """
     
     with open(config_file, 'r') as file:
-        return json.load(file)
+        return load(file)
 
 
 def construct_mater_schema_link(subject, data_model):
     """
-    Construct the GitHub link to the schema.json file in the Master brnach.
+    Construct the GitHub link to the schema.json file in the Master branch.
 
     This function generates a URL pointing to the schema.json file in the master branch
     for a specific data model within the Smart Data Models repository on GitHub.
@@ -134,16 +135,16 @@ def get_commits_from_github(subject, data_model):
 
     while True:
         try:
-            response = requests.get(f"{url}&page={page}", headers=HEADERS)
+            response = get(f"{url}&page={page}", headers=HEADERS)
             response.raise_for_status()
 
             # Check rate limit
             remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
             if remaining <= 1:
                 reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
-                sleep_time = max(reset_time - time.time(), 0) + 1
-                logging.warning(f"Rate limit reached. Sleeping for {sleep_time:.2f} seconds.")
-                time.sleep(sleep_time)
+                sleep_time = max(reset_time - time(), 0) + 1
+                warning(f"Rate limit reached. Sleeping for {sleep_time:.2f} seconds.")
+                sleep(sleep_time)
 
             commits = response.json()
             if not commits:
@@ -152,15 +153,15 @@ def get_commits_from_github(subject, data_model):
             all_commits.extend(commits)
             page += 1
 
-        except requests.exceptions.RequestException as e:
+        except RequestException as e:
             if response.status_code == 403 and 'rate limit' in response.text.lower():
                 reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
-                sleep_time = max(reset_time - time.time(), 0) + 1
-                logging.warning(f"Rate limit exceeded. Sleeping for {sleep_time:.2f} seconds.")
-                time.sleep(sleep_time)
+                sleep_time = max(reset_time - time(), 0) + 1
+                warning(f"Rate limit exceeded. Sleeping for {sleep_time:.2f} seconds.")
+                sleep(sleep_time)
                 continue  # Retry the request
             else:
-                logging.error(f"Error fetching commits: {e}")
+                error(f"Error fetching commits: {e}")
                 return [], repo_name
 
     return all_commits, repo_name
@@ -205,12 +206,12 @@ def parse_commits(data_model_list):
             commit_details_url = f"{GITHUB_API_URL}/{repo_name}/commits/{commit_hash}"
             try:
                 # Send a request to get the commit details
-                commit_details_response = requests.get(commit_details_url, headers=HEADERS)
+                commit_details_response = get(commit_details_url, headers=HEADERS)
                 commit_details_response.raise_for_status()  
                 commit_details = commit_details_response.json()
-            except requests.exceptions.RequestException as e:
+            except RequestException as e:
                 # Log errors while fetching commit details
-                logging.error(f"Error fetching commit details: {e}")
+                error(f"Error fetching commit details: {e}")
                 continue  # Skip to the next commit if an error occurs
 
             # Get the list of files changed in the commit
@@ -222,12 +223,12 @@ def parse_commits(data_model_list):
                     schema_url = f"https://raw.githubusercontent.com/smart-data-models/{repo_name}/{commit_hash}/{data_model}/schema.json"
                     try:
                         # Send a request to get the schema content
-                        schema_response = requests.get(schema_url)
+                        schema_response = get(schema_url)
                         schema_response.raise_for_status() 
                         schema_content = schema_response.text 
-                    except requests.exceptions.RequestException as e:
+                    except RequestException as e:
                         # Log any errors encountered while fetching schema content
-                        logging.error(f"Error fetching schema content: {e}")
+                        error(f"Error fetching schema content: {e}")
                         continue  # Skip to the next file if an error occurs
 
                     # Look for the line in the schema content that contains the schemaVersion
@@ -237,7 +238,7 @@ def parse_commits(data_model_list):
                     )
                     if version_line:
                         # Use a regular expression to extract the version number from the line
-                        match = re.search(r'"\$schemaVersion"\s*:\s*"([^"]+)"', version_line)
+                        match = search(r'"\$schemaVersion"\s*:\s*"([^"]+)"', version_line)
                         current_version = match.group(1) if match else None  # Get the version if found
 
                         # Check if the subject has not changed and the version has changed
@@ -256,30 +257,30 @@ def parse_commits(data_model_list):
                         last_version = current_version
                         last_subject = subject
 
-    return json.dumps(json_payload, indent=4)
+    return dumps(json_payload, indent=4)
 
 
 def main():
     """Main function to execute the script."""
     start_time = datetime.now()
-    logging.info(f"Starting initial population at {start_time}")
+    info(f"Starting initial population at {start_time}")
 
-    config = load_config("sdm_versions_manager/config.json")
+    config = load_config("config.json")
     data_models_list = config.get('data_models', [])
 
-    logging.info(f"Loaded {len(data_models_list)} data models from configuration")
+    info(f"Loaded {len(data_models_list)} data models from configuration")
 
     result_json = parse_commits(data_models_list)
 
     # Insert data into MongoDB
-    insert_data_to_mongo(json.loads(result_json))  # Call the function to insert data
-    logging.info(f"Inserted versions data into MongoDB")
+    insert_data_to_mongo(loads(result_json))  # Call the function to insert data
+    info("Inserted versions data into MongoDB")
 
     end_time = datetime.now()
     duration = end_time - start_time
-    logging.info(f"Initial population completed at {end_time}")
-    logging.info(f"Total duration: {duration}")
-    logging.info("-" * 50)  # Add a separator line for readability
+    info(f"Initial population completed at {end_time}")
+    info(f"Total duration: {duration}")
+    info("-" * 50)  # Add a separator line for readability
 
 
 if __name__ == "__main__":

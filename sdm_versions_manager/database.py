@@ -26,11 +26,10 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 from os import getenv
 
-
-# Load MongoDB connection details from environment variables or configuration
-MONGO_URI = getenv('MONGO_URI')
-DB_NAME = getenv('DB_NAME')
-COLLECTION_NAME = getenv('COLLECTION_NAME')
+MONGO_URI = str()
+DB_NAME = str()
+COLLECTION_NAME = str()
+GITHUB_TOKEN = str()
 
 
 def document_exists(data):
@@ -45,6 +44,8 @@ def document_exists(data):
     Raises:
         ConnectionError: If there's an issue connecting to the database.
     """
+    get_environment_variables()
+
     client = None
     try:
         client = MongoClient(MONGO_URI)
@@ -83,6 +84,7 @@ def insert_data_to_mongo(data):
     Raises:
         ConnectionError: If there's an issue connecting to the database.
     """
+    get_environment_variables()
 
     client = None
     inserted_count = 0
@@ -124,6 +126,8 @@ def get_existing_versions(subject, data_model):
     Raises:
         ConnectionError: If there's an issue connecting to the database.
     """
+    get_environment_variables()
+
     client = None
     try:
         client = MongoClient(MONGO_URI)
@@ -144,3 +148,20 @@ def get_existing_versions(subject, data_model):
     finally:
         if client:
             client.close()
+
+
+def get_environment_variables() -> None:
+    # Load MongoDB connection details from environment variables or configuration
+    global MONGO_URI, DB_NAME, COLLECTION_NAME, GITHUB_TOKEN
+
+    if MONGO_URI == '':
+        MONGO_URI = getenv('MONGO_URI')
+
+    if DB_NAME == '':
+        DB_NAME = getenv('DB_NAME')
+
+    if COLLECTION_NAME == '':
+        COLLECTION_NAME = getenv('COLLECTION_NAME')
+
+    if GITHUB_TOKEN == '':
+        GITHUB_TOKEN = getenv('GITHUB_TOKEN')

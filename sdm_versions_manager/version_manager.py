@@ -27,14 +27,16 @@
 # Next Steps: It can also handle any additional logic related to version management, 
 # such as logging updates to WDME or notifying users of data models from WDME.
 
-import os
-import requests
-import re
-import json
 from database import insert_data_to_mongo, get_existing_versions
 from dotenv import load_dotenv
-import logging
 from datetime import datetime
+from os import getenv, makedirs
+from logging import info, basicConfig, INFO
+from re import search
+from requests import get
+from requests.exceptions import RequestException
+from json import load
+
 
 
 # Load environment variables
@@ -42,15 +44,15 @@ load_dotenv()
 
 
 # Logging set up 
-os.makedirs('logs', exist_ok=True)
+makedirs('logs', exist_ok=True)
 
-logging.basicConfig(filename='logs/version_updates.log', level=logging.INFO,
-                    format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+basicConfig(filename='logs/version_updates.log', level=INFO,
+            format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 
 GITHUB_API_URL = "https://api.github.com/repos/smart-data-models"
 HEADERS = {
-    "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
+    "Authorization": f"token {getenv('GITHUB_TOKEN')}",
     "Accept": "application/vnd.github.v3+json"
 }
 
@@ -84,7 +86,7 @@ def fetch_latest_versions(data_model_list):
         url = f"{GITHUB_API_URL}/{repo_name}/commits?path={data_model}/schema.json"
 
         try:
-            response = requests.get(url, headers=HEADERS)
+            response = get(url, headers=HEADERS)
             response.raise_for_status()
             commits = response.json()
 
@@ -95,7 +97,7 @@ def fetch_latest_versions(data_model_list):
 
                 # Fetch the schema content from the latest commit
                 schema_url = f"https://raw.githubusercontent.com/smart-data-models/{repo_name}/{commit_hash}/{data_model}/schema.json"
-                schema_response = requests.get(schema_url)
+                schema_response = get(schema_url)
                 schema_response.raise_for_status()
                 schema_content = schema_response.text
 
@@ -105,7 +107,7 @@ def fetch_latest_versions(data_model_list):
                     None
                 )
                 if version_line:
-                    match = re.search(r'"\$schemaVersion"\s*:\s*"([^"]+)"', version_line)
+                    match = search(r'"\$schemaVersion"\s*:\s*"([^"]+)"', version_line)
                     current_version = match.group(1) if match else None
 
                     if current_version:
@@ -118,7 +120,7 @@ def fetch_latest_versions(data_model_list):
                             "commitDate": commit_date
                         })
 
-        except requests.exceptions.RequestException as e:
+        except RequestException as e:
             print(f"Error fetching data from GitHub for {subject}/{data_model}: {e}")
 
     return latest_versions
@@ -143,7 +145,7 @@ def update_database_with_new_versions(data_model_list):
     update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     updates_made = False
 
-    logging.info(f"Version check started at {update_date}")
+    info(f"Version check started at {update_date}")
 
     for version_info in latest_versions:
         # Check if the version already exists in the database
@@ -151,38 +153,38 @@ def update_database_with_new_versions(data_model_list):
 
         if existing_version:
             # Compare the existing version with the latest version
-            # exisiting_version: latest version of data model already in database
+            # existing_version: latest version of data model already in database
             # version_info: current version on GitHub
             if existing_version['version'] != version_info['version']:
                 insert_data_to_mongo([version_info])  # Insert as a list
                 log_message = f"Updated {version_info['dataModel']} from version {existing_version['version']} to {version_info['version']}"
                 print(log_message)
-                logging.info(log_message)
+                info(log_message)
                 updates_made = True
         else:
             # If no existing version, insert the new version
             insert_data_to_mongo([version_info])
             log_message = f"Inserted new version: {version_info['version']} for {version_info['dataModel']}"
             print(log_message)
-            logging.info(log_message)
+            info(log_message)
             updates_made = True
 
         if not updates_made:
-            logging.info("No updates were necessary. All versions are current.")
+            info("No updates were necessary. All versions are current.")
 
-        logging.info(f"Version check completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        logging.info("-" * 50)  # Separator line for readability
+        info(f"Version check completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        info("-" * 50)  # Separator line for readability
 
 
 if __name__ == "__main__":
 
     # Load the data models from the config file
-    with open('sdm_versions_manager/config.json', 'r') as config_file:
-        config = json.load(config_file)
+    with open('config.json', 'r') as config_file:
+        config = load(config_file)
         data_models_list = config.get('data_models', [])
 
     # Update the database with new versions
     update_database_with_new_versions(data_models_list)
     
 
-    #https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json
+    # https://github.com/smart-data-models/dataModel.{subject}/blob/{commit_hash}/{data_model}/schema.json
