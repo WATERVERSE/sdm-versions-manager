@@ -38,7 +38,7 @@
    [installation instructions](https://github.com/astral-sh/uv?tab=readme-ov-file#installation).
 
     ```bash
-    uv venv --python 3.11
+    uv venv --python 3.13
     source .venv/bin/activate
     ```  
    
@@ -129,6 +129,7 @@ To run the script and populate the MongoDB database with the historic  versions 
 command:
 
 ```bash
+cd sdm_versions_manager
 python initial_population.py
 ```
 
@@ -221,6 +222,13 @@ To start the server, run the following command:
 ```bash
 cd api
 python -m uvicorn server:app --reload
+```
+
+If you want to specify the host and port, execute the following command:
+
+```bash
+cd api
+python -m uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### API endpoints

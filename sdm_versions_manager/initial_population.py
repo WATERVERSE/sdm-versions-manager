@@ -48,6 +48,7 @@ from logging import info, warning, error, basicConfig, INFO
 from time import time, sleep
 from os import getenv, makedirs
 from re import search
+from tqdm import tqdm
 
 
 # Load environment variables from .env file
@@ -190,7 +191,7 @@ def parse_commits(data_model_list):
     json_payload = []
 
     # Iterate through each subject and data model pair in the provided list
-    for subject, data_model in data_model_list:
+    for subject, data_model in tqdm(data_model_list, desc="Data Models", ncols=80, colour='green'):
         # Fetch the commit history from GitHub for the current subject and data model
         commits, repo_name = get_commits_from_github(subject, data_model)
 
